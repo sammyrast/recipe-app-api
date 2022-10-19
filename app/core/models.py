@@ -20,7 +20,16 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
 
-        return user 
+        return user
+
+    def create_superuser(self, email, password):
+        """Create and return a new superuser"""
+        user = self.create_user(email, password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -31,4 +40,4 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
-    USERNAME_FIELD = 'email' # here we are changing the default user model
+    USERNAME_FIELD = 'email'
